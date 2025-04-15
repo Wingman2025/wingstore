@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-lg">
+            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'store/no-image.png' %}{% endif %}" class="card-img-top product-img" alt="{{ product.name }}">
+            <div class="card-body">
+                <h3 class="card-title">{{ product.name }}</h3>
+                <p class="card-text">{{ product.description }}</p>
+                <ul class="list-group list-group-flush mb-3">
+                    <li class="list-group-item"><strong>Stock disponible:</strong> {{ product.stock }}</li>
+                </ul>
+                <a href="/" class="btn btn-outline-primary">Volver al catálogo</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
