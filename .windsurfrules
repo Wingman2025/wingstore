@@ -1,1 +1,2 @@
 Is manndatory that you use the agents sdk from openai as describe in this link https://openai.github.io/openai-agents-python/agents/
+we will deploy to railway in production with a postgresql db

@@ -11,6 +11,24 @@ function markdownToHtml(text) {
     return text.replace(/\[([^\]]+)\]\(([^\)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
 }
 
+function saveChatHistory() {
+    const chatBody = document.getElementById('chat-body');
+    const messages = [];
+    chatBody.querySelectorAll('.chat-msg').forEach(msgDiv => {
+        const sender = msgDiv.classList.contains('user') ? 'user' : 'agent';
+        const text = msgDiv.innerText;
+        messages.push({ sender, text });
+    });
+    localStorage.setItem('wingfoil_chat_history', JSON.stringify(messages));
+}
+
+function loadChatHistory() {
+    const history = localStorage.getItem('wingfoil_chat_history');
+    if (!history) return;
+    const messages = JSON.parse(history);
+    messages.forEach(msg => appendMessage(msg.sender, msg.text));
+}
+
 function appendMessage(sender, text) {
     const chatBody = document.getElementById('chat-body');
     const msgDiv = document.createElement('div');
@@ -22,6 +40,13 @@ function appendMessage(sender, text) {
     }
     chatBody.appendChild(msgDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
+    saveChatHistory();
+}
+
+function getChatHistory() {
+    const history = localStorage.getItem('wingfoil_chat_history');
+    if (!history) return [];
+    return JSON.parse(history);
 }
 
 function sendMessage() {
@@ -35,10 +60,13 @@ function sendMessage() {
     input.value = '';
     appendMessage('agent', '<span class="typing">WingfoilBot está escribiendo...</span>');
 
+    // Obtén el historial antes de enviar
+    const history = getChatHistory();
+
     fetch('/chat_api/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: message })
+        body: JSON.stringify({ message: message, history: history })
     })
     .then(async response => {
         console.log('Respuesta recibida del backend, status:', response.status);
@@ -107,6 +135,7 @@ function sendMessage() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    loadChatHistory();
     document.getElementById('chat-toggle-btn').onclick = toggleChatPopup;
     document.getElementById('chat-send-btn').onclick = sendMessage;
     document.getElementById('chat-input').addEventListener('keydown', function(e) {

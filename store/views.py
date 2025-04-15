@@ -47,7 +47,7 @@ async def listar_productos() -> str:
         return "No hay productos disponibles en este momento."
     respuesta = ""
     for p in productos:
-        url = f"/product/{p.pk}/"
+        url = f"http://127.0.0.1:8000/producto/{p.pk}/"
         respuesta += f"- {p.name}: {p.description[:40]}... (Stock: {p.stock}) [Ver producto]({url})\n"
     return respuesta
 
@@ -90,9 +90,19 @@ def chat_api(request):
                 return JsonResponse({'response': f"ERROR al leer JSON: {e}\n{tb}"}, status=400)
 
             user_message = data.get('message', '')
+            history = data.get('history', [])
             logger.info(f"Mensaje recibido del usuario: {user_message}")
             try:
-                result = run_agent_sync(AGENT, user_message)
+                # Convierte el historial del frontend al formato OpenAI
+                messages = []
+                for msg in history:
+                    if msg['sender'] == 'user':
+                        messages.append({'role': 'user', 'content': msg['text']})
+                    elif msg['sender'] == 'agent':
+                        messages.append({'role': 'assistant', 'content': msg['text']})
+                # Añade el mensaje actual al final
+                messages.append({'role': 'user', 'content': user_message})
+                result = run_agent_sync(AGENT, messages)
                 respuesta = result.final_output
                 return JsonResponse({'response': respuesta})
             except Exception as e:

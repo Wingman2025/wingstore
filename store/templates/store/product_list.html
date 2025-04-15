@@ -1,53 +1,98 @@
 {% extends 'base.html' %}
 {% load static %}
 
+<link rel="stylesheet" href="{% static 'store/main_page.css' %}">
+
 {% block content %}
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h2 class="fw-bold">Catálogo de Productos</h2>
-        <p class="text-muted">Descubre lo último en wings, tablas, foils y accesorios para wingfoil. Filtra por año o categoría para encontrar tu equipo ideal.</p>
+<div class="hero-cabrinha">
+    <h1>Bienvenido a la tienda oficial Cabrinha Wingfoil</h1>
+    <p>Descubre la mejor selección de wings, tablas, foils y accesorios Cabrinha. Asesoría experta, productos originales y la mejor experiencia para riders de todos los niveles.</p>
+    <button id="show-catalog-btn" class="btn-cabrinha">Ver catálogo</button>
+</div>
+
+<div class="cabrinha-benefits">
+    <div class="cabrinha-benefit">
+        <div class="cabrinha-benefit-icon">🚚</div>
+        <div class="cabrinha-benefit-title">Envío rápido</div>
+        <div class="cabrinha-benefit-desc">Recibe tu equipo Cabrinha en tiempo récord, a todo el país.</div>
     </div>
-    <div class="col-md-4">
-        <form method="get" class="d-flex gap-2">
-            <select name="year" class="form-select">
-                <option value="">Año</option>
-                <option value="2025">2025</option>
-                <option value="2024">2024</option>
-            </select>
-            <select name="categoria" class="form-select">
-                <option value="">Categoría</option>
-                <option value="Wing">Wing</option>
-                <option value="Tabla">Tabla</option>
-                <option value="Foil">Foil</option>
-                <option value="Accesorio">Accesorio</option>
-                <option value="Ropa">Ropa</option>
-            </select>
-            <button class="btn btn-primary" type="submit">Filtrar</button>
-        </form>
+    <div class="cabrinha-benefit">
+        <div class="cabrinha-benefit-icon">🤝</div>
+        <div class="cabrinha-benefit-title">Asesoría experta</div>
+        <div class="cabrinha-benefit-desc">Te ayudamos a elegir el equipo perfecto para tu nivel y objetivos.</div>
+    </div>
+    <div class="cabrinha-benefit">
+        <div class="cabrinha-benefit-icon">🏅</div>
+        <div class="cabrinha-benefit-title">Productos oficiales</div>
+        <div class="cabrinha-benefit-desc">Solo vendemos productos Cabrinha 100% originales y garantizados.</div>
+    </div>
+    <div class="cabrinha-benefit">
+        <div class="cabrinha-benefit-icon">💬</div>
+        <div class="cabrinha-benefit-title">Soporte en vivo</div>
+        <div class="cabrinha-benefit-desc">¿Dudas? ¡Habla con nuestro asesor en el chat!</div>
     </div>
 </div>
 
-<div class="row g-4">
-    {% for product in products %}
-    <div class="col-12 col-sm-6 col-md-4 col-lg-3">
-        <div class="card product-card h-100 shadow-sm">
-            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'store/no-image.png' %}{% endif %}" class="card-img-top product-img" alt="{{ product.name }}">
-            <div class="card-body d-flex flex-column">
-                <h5 class="card-title mb-1">{{ product.name }}</h5>
-                <p class="card-text small text-muted mb-2">{{ product.description|truncatechars:60 }}</p>
-                <div class="mb-2">
-                    <span class="badge bg-info text-dark">Stock: {{ product.stock }}</span>
-                </div>
-                <div class="mt-auto">
-                    <a href="{% url 'product_detail' product.pk %}" class="btn btn-outline-primary w-100">Ver detalles</a>
+<div id="catalogo-cabrinha" style="display:none;">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h2 class="fw-bold">Catálogo de Productos</h2>
+            <p class="text-muted">Filtra por año o categoría para encontrar tu equipo ideal.</p>
+        </div>
+        <div class="col-md-4">
+            <form method="get" class="d-flex gap-2">
+                <select name="year" class="form-select">
+                    <option value="">Año</option>
+                    <option value="2025">2025</option>
+                    <option value="2024">2024</option>
+                </select>
+                <select name="categoria" class="form-select">
+                    <option value="">Categoría</option>
+                    <option value="Wing">Wing</option>
+                    <option value="Tabla">Tabla</option>
+                    <option value="Foil">Foil</option>
+                    <option value="Accesorio">Accesorio</option>
+                    <option value="Ropa">Ropa</option>
+                </select>
+                <button class="btn btn-primary" type="submit">Filtrar</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        {% for product in products %}
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+            <div class="card product-card h-100 shadow-sm">
+                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'store/no-image.png' %}{% endif %}" class="card-img-top product-img" alt="{{ product.name }}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title mb-1">{{ product.name }}</h5>
+                    <p class="card-text small text-muted mb-2">{{ product.description|truncatechars:60 }}</p>
+                    <div class="mb-2">
+                        <span class="badge bg-info text-dark">Stock: {{ product.stock }}</span>
+                    </div>
+                    <div class="mt-auto">
+                        <a href="{% url 'product_detail' product.pk %}" class="btn btn-outline-primary w-100">Ver detalles</a>
+                    </div>
                 </div>
             </div>
         </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-warning">No hay productos disponibles con los filtros seleccionados.</div>
+        </div>
+        {% endfor %}
     </div>
-    {% empty %}
-    <div class="col-12">
-        <div class="alert alert-warning">No hay productos disponibles con los filtros seleccionados.</div>
-    </div>
-    {% endfor %}
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var btn = document.getElementById('show-catalog-btn');
+        var catalogo = document.getElementById('catalogo-cabrinha');
+        btn.addEventListener('click', function() {
+            catalogo.style.display = 'block';
+            btn.style.display = 'none';
+            window.scrollTo({ top: catalogo.offsetTop - 40, behavior: 'smooth' });
+        });
+    });
+</script>
 {% endblock %}
