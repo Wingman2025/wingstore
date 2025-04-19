@@ -6,21 +6,6 @@
 # 2) Sección DEPLOY
 [deploy]
   # Comando que mantiene el contenedor vivo:
-  startCommand = "gunicorn wingstore.wsgi:application --bind 0.0.0.0:${PORT}"
+  startCommand = "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn wingstore.wsgi:application --bind 0.0.0.0:${PORT}"
 
-  # Hooks que se ejecutan DESPUÉS de que el contenedor arranca
-  [[deploy.postDeploy]]
-    command = "python manage.py migrate --noinput"
-
-  [[deploy.postDeploy]]
-    command = "python manage.py collectstatic --noinput"
-
-  [[deploy.postDeploy]]
-    command = '''
-      python manage.py shell -c "
-from django.contrib.auth import get_user_model
-U = get_user_model()
-U.objects.filter(username='jorge').exists() or
-U.objects.create_superuser('jorge','jorge@gmail.com','1234tarifa@')"
-    '''
 # ──────────────────────────────────────────────────────────
