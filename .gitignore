@@ -77,3 +77,5 @@ coverage.xml
 *.bak
 *.swp
 *.tmp
+
+.windsurfrules
