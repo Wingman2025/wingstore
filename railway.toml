@@ -6,6 +6,6 @@
 # 2) Sección DEPLOY
 [deploy]
   # Comando que mantiene el contenedor vivo:
-  startCommand = "python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn wingstore.wsgi:application --bind 0.0.0.0:${PORT}"
+  startCommand = "python manage.py migrate --fake-initial --noinput && python manage.py collectstatic --noinput && gunicorn wingstore.wsgi:application --bind 0.0.0.0:${PORT}"
 
 # ──────────────────────────────────────────────────────────
