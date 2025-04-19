@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
         <div class="card shadow-lg">
-            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'store/no-image.png' %}{% endif %}" class="card-img-top product-img" alt="{{ product.name }}">
+            <img src="{% if product.image %}{% if product.image.url %}{{ product.image.url }}{% else %}{{ product.image }}{% endif %}{% else %}{% static 'store/no-image.png' %}{% endif %}" class="card-img-top product-img" alt="{{ product.name }}">
             <div class="card-body">
                 <h3 class="card-title">{{ product.name }}</h3>
                 <p class="card-text">{{ product.description }}</p>

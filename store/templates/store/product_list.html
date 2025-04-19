@@ -63,7 +63,7 @@
         {% for product in products %}
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
             <div class="card product-card h-100 shadow-sm">
-                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'store/no-image.png' %}{% endif %}" class="card-img-top product-img" alt="{{ product.name }}">
+                <img src="{% if product.image %}{% if product.image.url %}{{ product.image.url }}{% else %}{{ product.image }}{% endif %}{% else %}{% static 'store/no-image.png' %}{% endif %}" class="card-img-top product-img" alt="{{ product.name }}">
                 <div class="card-body d-flex flex-column">
                     <h5 class="card-title mb-1">{{ product.name }}</h5>
                     <p class="card-text small text-muted mb-2">{{ product.description|truncatechars:60 }}</p>
