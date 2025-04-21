@@ -15,6 +15,7 @@
                     <button type="submit" class="btn btn-primary">Enviar</button>
                 </div>
             </form>
+            <button type="button" id="clear-chat" class="btn btn-danger mt-2">Limpiar chat</button>
         </div>
     </div>
     <a href="/" class="btn btn-secondary">Volver a la tienda</a>
@@ -23,6 +24,7 @@
     const chatBox = document.getElementById('chat-box');
     const chatForm = document.getElementById('chat-form');
     const userMessage = document.getElementById('user-message');
+    const clearBtn = document.getElementById('clear-chat');
 
     chatForm.onsubmit = async function(e) {
         e.preventDefault();
@@ -41,5 +43,9 @@
         chatBox.innerHTML += `<div class='text-start'><b>Agente:</b> ${data.reply}</div>`;
         chatBox.scrollTop = chatBox.scrollHeight;
     }
+
+    clearBtn.onclick = function() {
+        chatBox.innerHTML = '';
+    };
 </script>
 {% endblock %}
